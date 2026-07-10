@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Entornos / secretos
+.env
+*.env
+
+# Editores / SO
+.vscode/
+.idea/
+.DS_Store
+
+# Temporales
+*.log
+*.pot~
+*.swp

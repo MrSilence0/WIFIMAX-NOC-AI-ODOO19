@@ -1,0 +1,12 @@
+<odoo>
+
+    <record id="seq_noc_ticket" model="ir.sequence">
+
+        <field name="name">NOC Ticket</field>
+        <field name="code">wifimax.noc.ticket</field>
+        <field name="prefix">NOC-</field>
+        <field name="padding">4</field>
+
+    </record>
+
+</odoo>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="action_wifimax_home_menu"
+                model="ir.actions.client">
+
+            <field name="name">Home Menu</field>
+            <field name="tag">wifimax_home_menu_action</field>
+            <field name="target">current</field>
+
+        </record>
+
+    </data>
+</odoo>

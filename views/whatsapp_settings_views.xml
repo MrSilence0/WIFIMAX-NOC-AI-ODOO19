@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_whatsapp_settings_list" model="ir.ui.view">
+
+        <field name="name">wifimax.whatsapp.settings.list</field>
+        <field name="model">wifimax.whatsapp.settings</field>
+
+        <field name="arch" type="xml">
+
+            <list>
+                <field name="name"/>
+                <field name="provider"/>
+                <field name="default_for_noc"/>
+                <field name="default_for_tickets"/>
+                <field name="active"/>
+            </list>
+
+        </field>
+
+    </record>
+
+    <record id="view_whatsapp_settings_form" model="ir.ui.view">
+
+        <field name="name">wifimax.whatsapp.settings.form</field>
+        <field name="model">wifimax.whatsapp.settings</field>
+
+        <field name="arch" type="xml">
+
+            <form>
+
+                <header>
+
+                    <button
+                        name="action_test_connection"
+                        type="object"
+                        string="Probar Conexión"
+                        class="btn-primary"/>
+
+                    <button
+                        name="action_send_test_message"
+                        type="object"
+                        string="Enviar Mensaje Prueba"
+                        class="btn-secondary"/>
+
+                </header>
+
+                <sheet>
+
+                    <group>
+
+                        <field name="name"/>
+
+                        <field name="active"/>
+
+                        <field name="provider"/>
+
+                        <field name="default_for_noc"/>
+
+                        <field name="default_for_tickets"/>
+
+                    </group>
+
+                    <!-- META CLOUD API -->
+
+                    <group
+                        string="Meta Cloud API"
+                        invisible="provider != 'meta'">
+
+                        <field
+                            name="access_token"
+                            password="True"/>
+
+                        <field name="phone_number_id"/>
+
+                        <field name="whatsapp_business_account_id"/>
+
+                    </group>
+
+                    <!-- EVOLUTION API -->
+
+                    <group
+                        string="Evolution API"
+                        invisible="provider != 'evolution'">
+
+                        <field name="evolution_url"/>
+
+                        <field name="evolution_instance"/>
+
+                        <field
+                            name="evolution_api_key"
+                            password="True"/>
+
+                        <separator string="Notificaciones"/>
+
+                        <field name="zabbix_group_id"/>
+
+                        <field name="test_phone"/>
+
+                    </group>
+
+                    <!-- TWILIO -->
+
+                    <group
+                        string="Twilio"
+                        invisible="provider != 'twilio'">
+
+                        <div class="o_form_label">Configuración pendiente de implementar.</div>
+
+                    </group>
+
+                </sheet>
+
+            </form>
+
+        </field>
+
+    </record>
+
+</odoo>

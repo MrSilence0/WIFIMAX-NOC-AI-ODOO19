@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_noc_document">
+        <t t-call="web.html_container">
+            
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+
+                        <h2>Reporte Mensual SLA Empresarial</h2>
+
+                        <p>
+                            <strong>Folio:</strong>
+                            <t t-esc="doc.name"/>
+                        </p>
+
+                        <p>
+                            <strong>Cliente:</strong>
+                            <t t-esc="doc.partner_id.name or 'Todos'"/>
+                        </p>
+
+                        <p>
+                            <strong>Periodo del reporte:</strong>
+                            <span t-field="doc.date_from" t-options='{"widget": "date"}'/> al <span t-field="doc.date_to" t-options='{"widget": "date"}'/>
+                        </p>
+
+                        <h4>Resumen Ejecutivo</h4>
+
+                        <table class="table table-bordered table-sm">
+                            <tr>
+                                <th>Total Tickets</th>
+                                <td>
+                                    <t t-esc="len(tickets)"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Resueltos</th>
+                                <td>
+                                    <t t-esc="len(tickets.filtered(lambda t: t.status == '3_done'))"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>SLA Vencidos</th>
+                                <td>
+                                    <t t-esc="len(tickets.filtered(lambda t: t.sla_status == 'expired'))"/>
+                                </td>
+                            </tr>
+
+                            <t t-set="expired"
+                                t-value="len(tickets.filtered(lambda t: t.sla_status == 'expired'))"/>
+
+                                <tr>
+                                    <th>Cumplimiento SLA</th>
+                                    <td>
+                                        <t t-if="len(tickets)">
+                                            <t t-esc="
+                                                round(
+                                                    ((len(tickets) - expired) * 100.0)
+                                                    / len(tickets),
+                                                    2
+                                                )
+                                            "/>%
+                                        </t>
+                                        <t t-else="">
+                                            0%
+                                        </t>
+                                    </td>
+                                </tr>
+
+                             <t t-set="resolved"
+                                t-value="tickets.filtered(lambda t: t.status == '3_done')"/>
+
+                                <tr>
+                                    <th>Promedio Resolución</th>
+                                    <td>
+                                        <t t-if="resolved">
+                                            <t t-esc="
+                                                round(
+                                                    sum(resolved.mapped('sla_hours')) /
+                                                    len(resolved),
+                                                    2
+                                                )
+                                            "/> hrs
+                                        </t>
+                                        <t t-else="">
+                                            0 hrs
+                                        </t>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th>Prioridad Alta</th>
+                                    <td>
+                                        <t t-esc="
+                                            len(
+                                                tickets.filtered(
+                                                    lambda t: t.priority == 'high'
+                                                )
+                                            )
+                                        "/>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th>Prioridad Media</th>
+                                    <td>
+                                        <t t-esc="
+                                            len(
+                                                tickets.filtered(
+                                                    lambda t: t.priority == 'medium'
+                                                )
+                                            )
+                                        "/>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th>Prioridad Baja</th>
+                                    <td>
+                                        <t t-esc="
+                                            len(
+                                                tickets.filtered(
+                                                    lambda t: t.priority == 'low'
+                                                )
+                                            )
+                                        "/>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th>Tickets Críticos</th>
+                                    <td>
+                                        <t t-esc="
+                                            len(
+                                                tickets.filtered(
+                                                    lambda t: t.zabbix_severity == 'urgent'
+                                                )
+                                            )
+                                        "/>
+                                    </td>
+                                </tr>
+                        </table>
+                        <br/>
+
+                        <h4>Detalle de Tickets</h4>
+
+                        <table class="table table-bordered table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Ticket</th>
+                                    <th>Cliente</th>
+                                    <th>Prioridad</th>
+                                    <th>Estado</th>
+                                    <th>Severidad</th>
+                                    <th>SLA</th>
+                                    <th>Fecha</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-if="tickets">
+                                    <t t-foreach="tickets" t-as="ticket">
+                                        <tr>
+                                            <td>
+                                                <t t-esc="ticket.name"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="ticket.partner_id.name or ''"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="
+                                                    dict(
+                                                        ticket._fields['priority'].selection
+                                                    ).get(ticket.priority)
+                                                "/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="
+                                                    dict(
+                                                        ticket._fields['status'].selection
+                                                    ).get(ticket.status)
+                                                "/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="
+                                                    dict(
+                                                        ticket._fields['zabbix_severity'].selection
+                                                    ).get(ticket.zabbix_severity)
+                                                "/>
+                                            </td>
+                                            <td>
+                                                <t t-if="ticket.sla_status == 'expired'">
+                                                    Incumplido
+                                                </t>
+
+                                                <t t-elif="ticket.sla_status == 'warning'">
+                                                    Próximo a vencer
+                                                </t>
+
+                                                <t t-else="">
+                                                    Cumplido
+                                                </t>
+                                            </td>
+                                            <td>
+                                                <t t-esc="ticket.detection_date"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </t>
+                                <t t-if="not tickets">
+                                    <tr>
+                                        <td colspan="7" class="text-center">
+                                            Sin tickets en el periodo seleccionado
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+
+                        <br/>
+
+                        <h4>Observaciones</h4>
+
+                        <t t-if="doc.notes">
+                            <div>
+                                <t t-out="doc.notes"/>
+                            </div>
+                        </t>
+                        <t t-else="">
+                            <p>Sin observaciones</p>
+                        </t>
+
+                        <br/>
+                        <br/>
+
+                        <div style="text-align:center; font-size:16px;">
+                            Reporte generado por
+                            <strong>
+                                <t t-esc="env.user.name"/>
+                            </strong>
+                            <br/>
+                            <span t-field="doc.create_date"/>
+                        </div>
+
+                    </div>
+                </t>
+            </t> </t>
+    </template>
+</odoo>

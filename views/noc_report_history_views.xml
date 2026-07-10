@@ -1,0 +1,174 @@
+<odoo>
+
+    <record id="view_noc_report_history_tree" model="ir.ui.view">
+
+        <field name="name">wifimax.noc.report.history.tree</field>
+
+        <field name="model">wifimax.noc.report.history</field>
+
+        <field name="arch" type="xml">
+
+            <list create="0">
+
+                <field name="name"/>
+
+                <field name="create_date" string="Fecha de Creación"/>
+
+                <field name="partner_id"/>
+
+                <field name="date_from"/>
+
+                <field name="date_to"/>
+
+                <field name="total_tickets"/>
+
+                <field name="create_uid" string="Creado Por"/>
+
+            </list>
+
+        </field>
+
+    </record>
+
+
+    <record id="view_noc_report_history_form" model="ir.ui.view">
+
+        <field name="name">wifimax.noc.report.history.form</field>
+
+        <field name="model">wifimax.noc.report.history</field>
+
+        <field name="arch" type="xml">
+
+            <form create="0">
+
+                <header>
+
+                    <button
+                        name="action_export_pdf"
+                        type="object"
+                        string="Descargar PDF"
+                        class="btn-primary"
+                    />
+
+                    <button
+                        name="action_send_email"
+                        type="object"
+                        string="Enviar Email"
+                        class="btn-secondary"
+                    />
+
+                    <button
+                        name="action_send_whatsapp"
+                        type="object"
+                        string="Enviar WhatsApp"
+                        class="btn-success"
+                        icon="fa-whatsapp"
+                    />
+
+                    <button
+                        name="action_view_pdf"
+                        type="object"
+                        string="Ver PDF"
+                        class="btn-secondary"
+                        invisible="not pdf_attachment_id"
+                    />
+
+                </header>
+
+                <sheet>
+
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+
+                    <group>
+
+                        <group string="Información del Reporte">
+                            <field name="partner_id" readonly="1"/>
+                            <field name="total_tickets" readonly="1"/>
+                        </group>
+
+                        <group string="Fechas">
+                            <field name="date_from" readonly="1"/>
+                            <field name="date_to" readonly="1"/>
+                        </group>
+
+                        <group>
+                            <field name="pdf_attachment_id" widget="many2one"/>
+                        </group>
+
+                    </group>
+
+                    <group>
+
+                        <group string="Detalles del Email" invisible="not email_sent">
+                            <field name="email_sent" readonly="1"/>
+
+                            <field name="email_sent_date" readonly="1"/>
+                        </group>
+
+                        <group string="Detalles de WhatsApp" invisible="not whatsapp_sent">
+                            <field name="whatsapp_sent" readonly="1"/>
+
+                            <field name="whatsapp_sent_date" readonly="1" string="Fecha de Envío"/>
+
+                            <field name="whatsapp_message_id" readonly="1" string="ID del Mensaje"/>
+
+                            <field name="whatsapp_error" readonly="1" string="Error de WhatsApp"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+
+                        <page string="Tickets">
+
+                            <field name="ticket_ids">
+
+                                <list>
+
+                                    <field name="name"/>
+
+                                    <field name="partner_id"/>
+
+                                    <field name="priority"/>
+
+                                    <field name="status"/>
+
+                                    <field name="sla_status"/>
+
+                                </list>
+
+                            </field>
+
+                        </page>
+
+                        <page string="Observaciones">
+
+                            <field name="notes"/>
+
+                        </page>
+
+                    </notebook>
+
+                </sheet>
+
+            </form>
+
+        </field>
+
+    </record>
+
+
+    <record id="action_noc_report_history" model="ir.actions.act_window">
+
+        <field name="name">Historial de Reportes</field>
+
+        <field name="res_model">wifimax.noc.report.history</field>
+
+        <field name="view_mode">list,form</field>
+
+    </record>
+
+</odoo>

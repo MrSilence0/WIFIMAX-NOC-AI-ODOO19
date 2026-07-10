@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="mail_template_noc_report" model="mail.template">
+
+            <field name="name">NOC Report</field>
+
+            <field name="model_id" ref="model_wifimax_noc_report_history"/>
+
+            <field name="subject">Reporte NOC {{ object.name }}</field>
+
+            <field name="email_to">{{ object.partner_id.email }}</field>
+
+            <field name="body_html" type="html">
+            <div>
+                <p>Estimado cliente:</p>
+
+                <p>
+                    Adjuntamos el reporte NOC correspondiente al periodo solicitado.
+                </p>
+
+                <p>
+                    Folio:
+                    <strong><t t-out="object.name"/></strong>
+                </p>
+            </div>
+            </field>
+
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,17 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_noc_ticket_user,noc.ticket.user,model_wifimax_noc_ticket,wifimax_noc_ai.group_noc_user,1,1,1,0
+access_noc_ticket_manager,noc.ticket.manager,model_wifimax_noc_ticket,wifimax_noc_ai.group_noc_manager,1,1,1,1
+access_noc_ticket_portal,noc.ticket.portal,model_wifimax_noc_ticket,base.group_portal,1,0,0,0
+access_res_partner_noc_user,res.partner.noc.user,base.model_res_partner,wifimax_noc_ai.group_noc_user,1,0,0,0
+access_res_partner_noc_manager,res.partner.noc.manager,base.model_res_partner,wifimax_noc_ai.group_noc_manager,1,0,0,0
+access_wifimax_noc_report_wizard,wifimax_noc_report_wizard,model_wifimax_noc_report_wizard,base.group_user,1,1,1,1
+access_noc_report_history_user,access_noc_report_history_user,model_wifimax_noc_report_history,base.group_user,1,1,1,1
+access_whatsapp_settings_user,access_whatsapp_settings_user,model_wifimax_whatsapp_settings,base.group_user,1,1,1,1
+access_whatsapp_template_user,access_whatsapp_template_user,model_wifimax_whatsapp_template,base.group_user,1,1,1,1
+access_noc_event_user,noc.event.user,model_wifimax_noc_event,wifimax_noc_ai.group_noc_user,1,1,1,0
+access_noc_event_manager,noc.event.manager,model_wifimax_noc_event,wifimax_noc_ai.group_noc_manager,1,1,1,1
+access_noc_incident_user,noc.incident.user,model_wifimax_noc_incident,wifimax_noc_ai.group_noc_user,1,1,1,0
+access_noc_incident_manager,noc.incident.manager,model_wifimax_noc_incident,wifimax_noc_ai.group_noc_manager,1,1,1,1
+access_noc_whatsapp_session,wifimax.noc.whatsapp.session,model_wifimax_noc_whatsapp_session,base.group_user,1,1,1,1
+access_noc_zone,wifimax.noc.zone,model_wifimax_noc_zone,base.group_user,1,1,1,1
+access_noc_action_request,wifimax.noc.action.request,model_wifimax_noc_action_request,base.group_user,1,1,1,1

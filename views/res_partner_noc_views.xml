@@ -1,0 +1,61 @@
+<odoo>
+
+    <record id="view_partner_form_noc" model="ir.ui.view">
+        <field name="name">res.partner.form.noc</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                <button type="object" name="action_view_noc_tickets"
+                    class="oe_stat_button" icon="fa-ticket">
+                    <field name="noc_ticket_count" widget="statinfo" string="Tickets"/>
+                </button>
+                <button type="object" name="action_view_open_tickets"
+                    class="oe_stat_button" icon="fa-folder-open">
+                    <field name="noc_open_ticket_count" widget="statinfo" string="Abiertos"/>
+                </button>
+                <button type="object" name="action_view_expired_tickets"
+                    class="oe_stat_button" icon="fa-clock-o">
+                    <field name="noc_expired_ticket_count" widget="statinfo" string="SLA"/>
+                </button>
+                <button type="object" name="action_view_critical_tickets"
+                    class="oe_stat_button" icon="fa-exclamation-triangle">
+                    <field name="noc_critical_ticket_count" widget="statinfo" string="Críticos"/>
+                </button>
+            </xpath>
+
+            <xpath expr="//field[@name='website']" position="before">
+                <field name="is_noc_staff" invisible="1"/>
+            </xpath>
+
+            <xpath expr="//field[@name='website']" position="attributes">
+                <attribute name="invisible">is_noc_staff == True</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='website']" position="after">
+                <field name="whatsapp_phone" widget="phone"/>
+                <field name="monitoring_ip" invisible="is_noc_staff == True"/>
+                <field name="zone_id"/>
+                <field name="map_url" widget="url" invisible="is_noc_staff == True"/>
+                <field name="is_business_client" widget="boolean_toggle" invisible="is_noc_staff == True"/>
+            </xpath>
+
+            <xpath expr="//page[@name='internal_notes']" position="before">
+                <page string="Equipos Monitoreados" name="noc_devices" invisible="is_noc_staff == True">
+                    <field name="noc_device_ids" nolabel="1">
+                        <list editable="bottom">
+                            <field name="name" string="Nombre del equipo"/>
+                            <field name="device_ip" string="IP"/>
+                            <field name="device_type" string="Tipo"/>
+                            <field name="active" string="Activo"/>
+                            <field name="notes" string="Notas"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

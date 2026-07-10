@@ -1,0 +1,41 @@
+<odoo>
+
+    <!-- =========================
+         MODULE CATEGORY
+    ========================== -->
+
+    <record id="module_category_noc" model="ir.module.category">
+        <field name="name">Wifimax NOC</field>
+        <field name="description">Security groups for Wifimax NOC AI</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <!-- =========================
+         NINGUNO
+    ========================== -->
+
+    <record id="group_noc_none" model="res.groups">
+        <field name="name">Ninguno</field>
+        <field name="category_id" ref="wifimax_noc_ai.module_category_noc"/>
+    </record>
+
+    <!-- =========================
+         NOC TECHNICIAN
+    ========================== -->
+
+    <record id="group_noc_user" model="res.groups">
+        <field name="name">NOC Technician</field>
+        <field name="category_id" ref="wifimax_noc_ai.module_category_noc"/>
+    </record>
+
+    <!-- =========================
+         NOC MANAGER
+    ========================== -->
+
+    <record id="group_noc_manager" model="res.groups">
+        <field name="name">NOC Manager</field>
+        <field name="category_id" ref="wifimax_noc_ai.module_category_noc"/>
+        <field name="implied_ids" eval="[(4, ref('wifimax_noc_ai.group_noc_user'))]"/>
+    </record>
+
+</odoo>

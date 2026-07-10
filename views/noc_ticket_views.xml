@@ -1,0 +1,648 @@
+<odoo>
+
+    <!-- =========================
+         SEQUENCE
+    ========================== -->
+
+    <record id="seq_noc_ticket" model="ir.sequence">
+        <field name="name">NOC Ticket</field>
+        <field name="code">wifimax.noc.ticket</field>
+        <field name="prefix">NOC-</field>
+        <field name="padding">5</field>
+        <field name="number_increment">1</field>
+    </record>
+
+
+    <!-- =========================
+         TREE VIEW
+    ========================== -->
+
+    <record id="view_noc_ticket_tree" model="ir.ui.view">
+
+        <field name="name">wifimax.noc.ticket.tree</field>
+        <field name="model">wifimax.noc.ticket</field>
+
+        <field name="arch" type="xml">
+
+            <list decoration-danger="zabbix_severity == 'urgent'"
+                  decoration-warning="zabbix_severity == 'attention'"
+                  default_order="detection_date desc">
+
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="assigned_user_id"/>
+                <field name="device_ip"/>
+                <field name="priority"/>
+                <field name="zabbix_severity" string="Severidad"/>
+                <field name="status"/>
+                <field name="sla_status"/>
+                <field name="sla_deadline"/>
+                <field name="detection_date"/>
+
+            </list>
+
+        </field>
+
+    </record>
+
+
+    <!-- =========================
+         FORM VIEW
+    ========================== -->
+
+    <record id="view_noc_ticket_form" model="ir.ui.view">
+
+        <field name="name">wifimax.noc.ticket.form</field>
+
+        <field name="model">wifimax.noc.ticket</field>
+
+        <field name="arch" type="xml">
+
+            <form>
+
+                <!-- HEADER -->
+
+                <header>
+
+                    <button
+                        name="action_start_progress"
+                        string="Iniciar"
+                        type="object"
+                        class="btn-primary"
+                        invisible="status != '1_new'"
+                    />
+
+                    <button
+                        name="action_done"
+                        string="Resolver"
+                        type="object"
+                        class="btn-success"
+                        invisible="status == '3_done'"
+                    />
+
+                    <button
+                        name="action_reset"
+                        string="Reabrir"
+                        type="object"
+                        class="btn-secondary"
+                        invisible="status == '1_new'"
+                    />
+
+                    <field
+                        name="status"
+                        widget="statusbar"
+                        statusbar_visible="1_new,2_progress,3_done"
+                    />
+
+                </header>
+
+
+                <!-- BODY -->
+
+                <sheet>
+
+                    <group>
+
+                        <group>
+
+                            <field name="name" readonly="1"/>
+
+                            <field name="partner_id"/>
+
+                            <field name="host_name" readonly="1"/>
+
+                            <field name="device_ip"/>
+
+                            <field name="assigned_user_id"/>
+
+                            <field name="address" readonly="1"/>
+
+                            <field name="map_url" widget="url"/>
+
+                        </group>
+
+                        <group>
+
+                            <field name="priority"/>
+
+                            <field name="zabbix_severity" readonly="1" string='Severidad'/>
+
+                            <field name="sla_status" readonly="1"/>
+
+                            <field name="sla_deadline" readonly="1"/>
+
+                        </group>
+
+                    </group>
+
+                    <notebook>
+
+                        <page string="Diagnóstico">
+
+                            <field name="description"/>
+
+                        </page>
+
+                        <page string="Timeline">
+
+                            <field name="detection_date"/>
+
+                            <field name="close_date"/>
+
+                        </page>
+
+                        <page string="Acciones IA">
+                            <field name="action_request_ids" nolabel="1">
+                                <list>
+                                    <field name="zone" string="Zona"/>
+                                    <field name="name" string="Acción recomendada"/>
+                                    <field name="state" string="Estado"/>
+                                    <field name="source" string="Fuente"/>
+                                    <field name="create_date" string="Fecha"/>
+                                </list>
+                            </field>
+                        </page>
+
+                    </notebook>
+
+                </sheet>
+
+                <chatter/>
+
+            </form>
+
+        </field>
+
+    </record>
+
+
+    <!-- =========================
+        KANBAN VIEW
+    ========================== -->
+
+    <record id="view_noc_ticket_kanban" model="ir.ui.view">
+
+        <field name="name">wifimax.noc.ticket.kanban</field>
+
+        <field name="model">wifimax.noc.ticket</field>
+
+        <field name="arch" type="xml">
+
+            <kanban
+                default_group_by="status"
+                class="o_kanban_small_column"
+                groups_draggable="false"
+                records_draggable="true"
+                default_order="detection_date desc"
+                limit="2"
+            >
+
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="assigned_user_id"/>
+                <field name="priority"/>
+                <field name="zabbix_severity"/>
+                <field name="status"/>
+                <field name="device_ip"/>
+                <field name="sla_status"/>
+                <field name="detection_date"/>
+
+                <templates>
+
+                    <t t-name="card">
+
+                        <div class="oe_kanban_global_click">
+
+                            <div class="oe_kanban_details p-2">
+
+                                <!-- HEADER -->
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+
+                                    <!-- TITULO -->
+                                    <div class="me-2">
+                                        <strong class="fw-semibold">
+                                            <field name="name"/>
+                                        </strong>
+                                    </div>
+
+                                    <!-- PRIORIDAD -->
+                                    <div>
+
+                                        <span
+                                            t-if="record.priority.raw_value == 'high'"
+                                            class="badge border border-danger text-danger bg-transparent"
+                                        >
+                                            Alta
+                                        </span>
+
+                                        <span
+                                            t-if="record.priority.raw_value == 'medium'"
+                                            class="badge border border-warning text-warning bg-transparent"
+                                        >
+                                            Media
+                                        </span>
+
+                                        <span
+                                            t-if="record.priority.raw_value == 'low'"
+                                            class="badge border border-success text-success bg-transparent"
+                                        >
+                                            Baja
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- CLIENTE -->
+
+                                <div class="text-muted small mb-1">
+
+                                    <i
+                                        class="fa fa-user me-1"
+                                        title="Cliente"
+                                    />
+
+                                    <field name="partner_id"/>
+
+                                </div>
+
+                                <!-- TECNICO -->
+
+                                <div class="text-muted small mb-1">
+
+                                    <i
+                                        class="fa fa-wrench me-1"
+                                        title="Técnico"
+                                    />
+
+                                    <field name="assigned_user_id"/>
+
+                                </div>
+
+                                <!-- IP -->
+
+                                <div class="text-muted small mb-1">
+
+                                    <i
+                                        class="fa fa-globe me-1"
+                                        title="IP"
+                                    />
+
+                                    <field name="device_ip"/>
+
+                                </div>
+
+                                <!-- FECHA -->
+
+                                <div class="text-muted small mb-2">
+
+                                    <i
+                                        class="fa fa-calendar me-1"
+                                        title="Fecha de detección"
+                                    />
+
+                                    <field name="detection_date"/>
+
+                                </div>
+
+
+                                <!-- FOOTER -->
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+
+                                    <!-- SEVERIDAD -->
+                                    <div class="d-flex gap-1">
+
+                                        <span
+                                            t-if="record.zabbix_severity.raw_value == 'urgent'"
+                                            class="badge text-bg-danger"
+                                        >
+                                            Urgente
+                                        </span>
+
+                                        <span
+                                            t-if="record.zabbix_severity.raw_value == 'attention'"
+                                            class="badge text-bg-warning"
+                                        >
+                                            Revisar
+                                        </span>
+
+                                        <span
+                                            t-if="record.zabbix_severity.raw_value == 'normal'"
+                                            class="badge text-bg-secondary"
+                                        >
+                                            Normal
+                                        </span>
+
+                                    </div>
+
+                                    <!-- SLA STATUS -->
+                                    <div>
+
+                                        <span
+                                            t-if="record.sla_status.raw_value == 'ok'"
+                                            class="text-success small fw-semibold"
+                                        >
+                                            SLA OK
+                                        </span>
+
+                                        <span
+                                            t-if="record.sla_status.raw_value == 'warning'"
+                                            class="text-warning small fw-semibold"
+                                        >
+                                            Próximo
+                                        </span>
+
+                                        <span
+                                            t-if="record.sla_status.raw_value == 'expired'"
+                                            class="text-danger small fw-semibold"
+                                        >
+                                            Vencido
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </t>
+
+                </templates>
+
+            </kanban>
+
+        </field>
+
+    </record>
+
+
+    <!-- =========================
+         SEARCH VIEW
+    ========================== -->
+
+    <record id="view_noc_ticket_search" model="ir.ui.view">
+
+        <field name="name">wifimax.noc.ticket.search</field>
+
+        <field name="model">wifimax.noc.ticket</field>
+
+        <field name="arch" type="xml">
+
+            <search>
+
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="assigned_user_id"/>
+
+                <field name="detection_date"
+                       string="Fecha Detección"
+                       filter_domain="[('detection_date','&gt;=',self)]"/>
+
+                <filter
+                    name="partner_context"
+                    string="Cliente Actual"
+                    domain="[('partner_id','=',context.get('active_partner_id'))]"
+                    invisible="1"
+                />
+
+                <filter
+                    name="filter_new"
+                    string="Nuevos"
+                    domain="[('status','=','1_new')]"
+                />
+
+                <filter
+                    name="filter_progress"
+                    string="En Progreso"
+                    domain="[('status','=','2_progress')]"
+                />
+
+                <filter
+                    name="filter_done"
+                    string="Resueltos"
+                    domain="[('status','=','3_done')]"
+                />
+
+                <filter
+                    name="filter_high"
+                    string="Prioridad Alta"
+                    domain="[('priority','=','high')]"
+                />
+
+                <filter
+                    name="filter_medium"
+                    string="Prioridad Media"
+                    domain="[('priority','=','medium')]"
+                />
+
+                <filter
+                    name="filter_low"
+                    string="Prioridad Baja"
+                    domain="[('priority','=','low')]"
+                />
+
+                <filter
+                    name="filter_warning"
+                    string="SLA Por Vencer"
+                    domain="[('sla_status','=','warning')]"
+                />
+
+                <filter
+                    name="filter_expired"
+                    string="SLA Vencido"
+                    domain="[('sla_status','=','expired')]"
+                />
+
+                <filter
+                    name="my_tickets"
+                    string="Mis Tickets"
+                    domain="[('assigned_user_id','=',uid)]"
+                />
+
+                <filter
+                    name="unassigned"
+                    string="Sin Técnico"
+                    domain="[('assigned_user_id','=',False)]"/>
+
+                <filter string="Open"
+                        name="open"
+                        domain="[('status','!=','3_done')]"/>
+
+                <filter string="Urgentes"
+                        name="urgent"
+                        domain="[('zabbix_severity','=','urgent')]"/>
+
+                <filter string="Expired SLA"
+                        name="expired_sla"
+                        domain="[('sla_status','=','expired')]"/>
+
+                <separator/>
+
+                <filter
+                    name="filter_today"
+                    string="Hoy"
+                    domain="[('detection_date','&gt;=', context_today().strftime('%Y-%m-%d'))]"
+                />
+
+                <filter
+                    name="filter_this_month"
+                    string="Este Mes"
+                    domain="[('detection_date','&gt;=', context_today().strftime('%Y-%m-01'))]"
+                />
+                
+                <separator/>
+
+                <group expand="0" string="Agrupar por">
+
+                    <filter
+                        name="group_by_status"
+                        string="Estado"
+                        context="{'group_by': 'status'}"
+                    />
+
+                    <filter
+                        name="group_by_priority"
+                        string="Prioridad"
+                        context="{'group_by': 'priority'}"
+                    />
+
+                    <filter
+                        name="group_by_technician"
+                        string="Técnico"
+                        context="{'group_by': 'assigned_user_id'}"
+                    />
+
+                    <filter
+                        name="group_by_date"
+                        string="Fecha de Detección"
+                        context="{'group_by': 'detection_date'}"
+                    />
+
+                </group>
+
+            </search>
+
+        </field>
+
+    </record>
+
+
+   <!-- =========================
+            ACTION
+    ========================== -->
+
+    <record id="action_noc_ticket" model="ir.actions.act_window">
+
+        <field name="name">NOC Tickets</field>
+
+        <field name="res_model">wifimax.noc.ticket</field>
+
+        <field name="search_view_id" ref="view_noc_ticket_search"/>
+
+        <field name="view_mode">list,form,kanban,graph,pivot</field>
+
+        <field name="context">{'search_default_filter_this_month': 0}</field>
+    </record>
+
+    <record id="action_noc_ticket_partner" model="ir.actions.act_window">
+
+        <field name="name">Tickets Cliente</field>
+
+        <field name="res_model">wifimax.noc.ticket</field>
+
+        <field name="view_mode">list,form,kanban,graph,pivot</field>
+
+        <field name="search_view_id" ref="view_noc_ticket_search"/>
+    </record>
+
+    <record id="action_noc_report_wizard" model="ir.actions.act_window">
+        <field name="name">Reporte NOC</field>
+
+        <field name="res_model">wifimax.noc.report.wizard</field>
+
+        <field name="view_mode">form</field>
+
+        <field name="target">current</field>
+    </record>
+
+    <record id="action_noc_report_history" model="ir.actions.act_window">
+
+        <field name="name">Historial de Reportes</field>
+
+        <field name="res_model">wifimax.noc.report.history</field>
+
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_whatsapp_settings" model="ir.actions.act_window">
+
+        <field name="name">Configuración WhatsApp</field>
+
+        <field name="res_model">wifimax.whatsapp.settings</field>
+
+        <field name="view_mode">list,form</field>
+    </record>
+
+
+    <!-- =========================
+        MENUS
+    ========================== -->
+
+    <menuitem
+        id="menu_wifimax_root"
+        name="Wifimax NOC"
+        sequence="1"
+    />
+
+    <menuitem
+        id="menu_noc_ticket"
+        name="Tickets"
+        parent="menu_wifimax_root"
+        action="action_noc_ticket"
+        sequence="1"
+    />
+
+    <menuitem
+        id="menu_business_clients"
+        parent="menu_wifimax_root"
+        name="Clientes Empresariales"
+        action="wifimax_noc_ai.action_business_clients"
+        sequence="2"
+    />
+
+    <menuitem
+        id="menu_noc_report"
+        parent="menu_wifimax_root"
+        name="Generar Reportes"
+        action="action_noc_report_wizard"
+        sequence="3"
+    />
+
+    <menuitem
+        id="menu_noc_report_history"
+        parent="menu_wifimax_root"
+        name="Historial Reportes"
+        action="action_noc_report_history"
+        sequence="4"
+    />
+
+    <menuitem
+        id="menu_whatsapp_settings"
+        name="Configuración de WhatsApp"
+        parent="menu_wifimax_root"
+        action="action_whatsapp_settings"
+        sequence="50"
+    />
+
+    <menuitem
+        id="menu_noc_zones"
+        name="Zonas NOC"
+        parent="menu_wifimax_root"
+        action="wifimax_noc_ai.action_noc_zone"
+        sequence="6"
+    />
+
+</odoo>

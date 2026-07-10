@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="email_template_noc_ticket_created" model="mail.template">
+
+            <field name="body_html" type="html">
+                <div>
+                    <h2>Nuevo Ticket NOC Asignado</h2>
+
+                    <p>
+                        Se ha generado un nuevo ticket y fue asignado a su usuario.
+                    </p>
+
+                    <table border="1" cellpadding="5">
+
+                        <tr>
+                            <td><strong>Ticket</strong></td>
+                            <td><t t-out="object.name"/></td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>Cliente</strong></td>
+                            <td><t t-out="object.partner_id.name"/></td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>Prioridad</strong></td>
+                            <td>
+                                <t t-out="dict(object._fields['priority'].selection).get(object.priority)"/>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>Estado</strong></td>
+                            <td>
+                                <t t-out="dict(object._fields['status'].selection).get(object.status)"/>
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <td><strong>IP Equipo</strong></td>
+                            <td><t t-out="object.device_ip"/></td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>Fecha Detección</strong></td>
+                            <td><t t-out="object.detection_date"/></td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>SLA</strong></td>
+                            <td><t t-out="object.sla_deadline"/></td>
+                        </tr>
+
+                    </table>
+
+                    <br/>
+
+                    <strong>Descripción:</strong>
+
+                    <p>
+                        <t t-out="object.description"/>
+                    </p>
+                </div>
+                </field>
+        </record>
+    </data>
+</odoo>

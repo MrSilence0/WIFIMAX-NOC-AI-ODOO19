@@ -1,0 +1,44 @@
+<odoo>
+
+    <record id="ir_cron_noc_sla_warning" model="ir.cron">
+        <field name="name">NOC SLA Warning</field>
+        <field name="model_id" ref="model_wifimax_noc_ticket"/>
+        <field name="state">code</field>
+        <field name="code">model.check_sla_warning()</field>
+        <field name="interval_number">5</field>
+        <field name="interval_type">minutes</field>
+        <field name="active">True</field>
+    </record>
+
+    <record id="ir_cron_noc_pending_incidents" model="ir.cron">
+        <field name="name">NOC: Crear tickets de incidents pendientes</field>
+        <field name="model_id" ref="model_wifimax_noc_incident"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_process_pending_incidents()</field>
+        <field name="interval_number">20</field>
+        <field name="interval_type">minutes</field>
+        <field name="active">True</field>
+    </record>
+
+    <record id="ir_cron_noc_monthly_reports" model="ir.cron">
+        <field name="name">NOC: Envío automático de reportes mensuales</field>
+        <field name="model_id" ref="model_wifimax_noc_report_history"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_send_monthly_reports()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">months</field>
+        <field name="nextcall">2026-08-01 10:00:00</field>
+        <field name="active">True</field>
+    </record>
+
+    <record id="ir_cron_noc_cleanup_sessions" model="ir.cron">
+        <field name="name">NOC: Limpiar sesiones WhatsApp inactivas</field>
+        <field name="model_id" ref="model_wifimax_noc_whatsapp_session"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_cleanup_inactive_sessions()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">hours</field>
+        <field name="active">True</field>
+    </record>
+
+</odoo>

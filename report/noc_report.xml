@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="action_report_noc_pdf" model="ir.actions.report">
+            <field name="name">Reporte NOC</field>
+            <field name="model">wifimax.noc.report.wizard</field>
+            <field name="report_type">qweb-pdf</field> 
+            <field name="report_name">wifimax_noc_ai.report_noc_document</field>
+            <field name="report_file">wifimax_noc_ai.report_noc_document</field>
+            <field name="binding_model_id" ref="model_wifimax_noc_report_wizard"/>
+        </record>
+
+        <record id="action_report_noc_history_pdf" model="ir.actions.report">
+
+            <field name="name">Reporte NOC Historial</field>
+
+            <field name="model">wifimax.noc.report.history</field>
+
+            <field name="report_type">qweb-pdf</field>
+
+            <field name="report_name">wifimax_noc_ai.report_noc_document</field>
+        </record>
+    </data>
+</odoo>

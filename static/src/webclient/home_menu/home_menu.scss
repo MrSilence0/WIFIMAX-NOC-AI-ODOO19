@@ -1,0 +1,20 @@
+.o_home_menu {
+    background:
+        linear-gradient(
+            135deg,
+            #f3f0f7 0%,
+            #ebe7f2 100%
+        );
+}
+
+.o_app {
+    transition: all 0.2s ease;
+}
+
+.o_app:hover {
+    transform: translateY(-6px) scale(1.03);
+}
+
+.o_app_icon {
+    transition: all 0.2s ease;
+}
