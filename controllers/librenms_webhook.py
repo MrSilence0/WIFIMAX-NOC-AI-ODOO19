@@ -15,7 +15,7 @@ class LibreNMSWebhook(http.Controller):
 
     @http.route(
         '/librenms/webhook',
-        type='json',
+        type='jsonrpc',
         auth='public',
         csrf=False,
         methods=['POST']

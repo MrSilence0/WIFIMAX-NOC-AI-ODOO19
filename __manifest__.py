@@ -1,6 +1,6 @@
 {
     'name': 'Wifimax NOC AI',
-    'version': '1.0',
+    'version': '19.0.1.0.0',
     'license': 'LGPL-3',
     'summary': 'Sistema NOC con IA para monitoreo y tickets',
     'author': 'Wifimax',
@@ -30,6 +30,7 @@
 
         # VIEWS
         'views/home_menu_views.xml',
+        'views/noc_zone_views.xml',
         'views/noc_business_client_views.xml',
         'views/res_partner_noc_views.xml',
         'views/noc_ticket_views.xml',
@@ -38,7 +39,6 @@
         'views/noc_report_wizard_views.xml',
         'views/noc_report_history_views.xml',
         'views/whatsapp_settings_views.xml',
-        'views/noc_zone_views.xml',
                 
         # REPORT 
         'report/noc_report_template.xml',

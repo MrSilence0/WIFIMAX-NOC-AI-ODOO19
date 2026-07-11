@@ -15,7 +15,7 @@ class ZabbixWebhook(http.Controller):
 
     @http.route(
         '/zabbix/webhook',
-        type='json',
+        type='jsonrpc',
         auth='public',
         csrf=False,
         methods=['POST']

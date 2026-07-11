@@ -14,4 +14,5 @@ access_noc_incident_user,noc.incident.user,model_wifimax_noc_incident,wifimax_no
 access_noc_incident_manager,noc.incident.manager,model_wifimax_noc_incident,wifimax_noc_ai.group_noc_manager,1,1,1,1
 access_noc_whatsapp_session,wifimax.noc.whatsapp.session,model_wifimax_noc_whatsapp_session,base.group_user,1,1,1,1
 access_noc_zone,wifimax.noc.zone,model_wifimax_noc_zone,base.group_user,1,1,1,1
-access_noc_action_request,wifimax.noc.action.request,model_wifimax_noc_action_request,base.group_user,1,1,1,1
+
+access_wifimax_noc_device,wifimax.noc.device,model_wifimax_noc_device,base.group_user,1,1,1,1

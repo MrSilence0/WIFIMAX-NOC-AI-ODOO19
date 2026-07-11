@@ -21,8 +21,6 @@
 
                 <field name="phone"/>
 
-                <field name="mobile"/>
-
                 <field name="email"/>
 
                 <field name="website"/>

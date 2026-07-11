@@ -79,7 +79,7 @@ class ResPartner(models.Model):
             ], limit=1)
 
             rec.is_noc_staff = bool(
-                user and user.id in noc_group.users.ids
+                user and noc_group in user.group_ids
             )
 
     def _compute_noc_ticket_stats(self):

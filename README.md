@@ -1,14 +1,38 @@
-# NOC WIFIMAX IA (`wifimax_noc_ai`)
+# NOC WIFIMAX IA (`wifimax_noc_ai`) — Odoo 19
 
-Módulo personalizado para **Odoo 18** que centraliza la gestión de eventos de red, el diagnóstico automático mediante inteligencia artificial, la administración de tickets de soporte y la comunicación bidireccional con clientes y técnicos a través de **WhatsApp Business**.
+Módulo personalizado para **Odoo 19** que centraliza la gestión de eventos de red, el diagnóstico automático mediante inteligencia artificial, la administración de tickets de soporte y la comunicación bidireccional con clientes y técnicos a través de **WhatsApp Business**.
 
 Desarrollado para el Centro de Operaciones de Red (NOC) de **Wifimax Connection**.
 
+> **Rama principal:** versión para Odoo 19.  
+> Para la versión Odoo 18 consulta el repositorio [WIFIMAX-NOC-AI-ODOO18](https://github.com/MrSilence0/WIFIMAX-NOC-AI-ODOO18).
+
+---
+
 ## Descripción general
 
-El sistema integra herramientas de monitoreo de red existentes (Zabbix 7.0 y LibreNMS) mediante webhooks HTTP autenticados, delega el diagnóstico automático de fallas a **Claude Sonnet 4.6** (Anthropic) vía API, y gestiona la comunicación de mensajería mediante **Evolution API** (servidor de WhatsApp Business propio). Todos los componentes convergen en la base de datos PostgreSQL administrada por Odoo 18, garantizando consistencia, trazabilidad y auditoría completa de las operaciones del NOC.
+El sistema integra herramientas de monitoreo de red existentes (Zabbix 7.0 y LibreNMS) mediante webhooks HTTP autenticados, delega el diagnóstico automático de fallas a **Claude Sonnet 4.6** (Anthropic) vía API, y gestiona la comunicación de mensajería mediante **Evolution API** (servidor de WhatsApp Business propio). Todos los componentes convergen en la base de datos PostgreSQL administrada por Odoo 19, garantizando consistencia, trazabilidad y auditoría completa de las operaciones del NOC.
 
-A diferencia de la propuesta inicial (microservicio externo en Node.js), la arquitectura final se consolidó íntegramente dentro de Odoo 18, aprovechando sus capacidades nativas de automatización, ORM, controladores web y cron jobs, eliminando dependencias externas.
+---
+
+## Cambios respecto a la versión Odoo 18
+
+Los siguientes ajustes fueron necesarios para la compatibilidad con Odoo 19:
+
+| Área | Cambio |
+| --- | --- |
+| Controllers | `@route(type='json')` reemplazado por `@route(type='jsonrpc')` |
+| Seguridad | Campo `category_id` eliminado de `res.groups` |
+| Vistas XML | Elemento `<group>` eliminado de `<search>`; reemplazado por `<filter>` individuales |
+| Vistas XML | Atributo `expand="0"` eliminado de `<group>` en vistas de búsqueda |
+| Vistas XML | `filter_domain` con `self` eliminado de campos en vistas de búsqueda |
+| Vistas XML | `invisible="1"` cambia a `invisible="True"` |
+| Modelos | Campo `mobile` eliminado de `res.partner` |
+| Modelos | `user.groups_id` reemplazado por `user.group_ids` en `res_partner.py` |
+| Referencias XML | Todos los `action=` en menuitems requieren prefijo del módulo: `wifimax_noc_ai.action_xxx` |
+| Configuración | `db_host = False` y `db_port = False` generan warnings; se recomienda omitirlos del `.conf` |
+
+---
 
 ## Características principales
 
@@ -22,15 +46,19 @@ A diferencia de la propuesta inicial (microservicio externo en Node.js), la arqu
 - **Reportes mensuales automáticos en PDF**: generados con QWeb y distribuidos por email y WhatsApp el día 1 de cada mes.
 - **Cron jobs nativos de Odoo**: sin dependencias de cron del sistema operativo.
 
+---
+
 ## Arquitectura
 
 | Componente | Rol |
 | --- | --- |
 | Zabbix 7.0 / LibreNMS | Monitoreo de red y disparo de alertas vía webhook |
-| Odoo 18 (`wifimax_noc_ai`) | Núcleo del sistema: modelos, lógica de negocio, controladores, cron jobs |
+| Odoo 19 (`wifimax_noc_ai`) | Núcleo del sistema: modelos, lógica de negocio, controladores, cron jobs |
 | Claude Sonnet 4.6 (Anthropic API) | Diagnóstico automático y asistente conversacional |
 | Evolution API | Puerta de enlace de WhatsApp Business |
 | PostgreSQL | Persistencia y auditoría |
+
+---
 
 ## Estructura del módulo
 
@@ -39,12 +67,14 @@ wifimax_noc_ai/
 ├── controllers/       # Endpoints HTTP (webhooks Zabbix, LibreNMS, WhatsApp)
 ├── models/            # Modelos de datos ORM
 ├── services/          # Lógica de negocio (correlación, diagnóstico IA, tickets, WhatsApp, severidad, recovery)
-├── views/              # Vistas XML (backend Odoo)
-├── data/               # Cron jobs, secuencias, plantillas de correo
-├── report/             # Reportes QWeb (PDF)
-├── security/           # Reglas de acceso y seguridad
-└── static/             # Assets del cliente web (JS/SCSS/XML)
+├── views/             # Vistas XML (backend Odoo)
+├── data/              # Cron jobs, secuencias, plantillas de correo
+├── report/            # Reportes QWeb (PDF)
+├── security/          # Reglas de acceso y seguridad
+└── static/            # Assets del cliente web (JS/SCSS/XML)
 ```
+
+---
 
 ## Modelos de datos
 
@@ -62,6 +92,8 @@ wifimax_noc_ai/
 
 También extiende `res.partner` con campos NOC: WhatsApp, IP monitoreada (legacy), zona asignada, ubicación en Maps, indicador de cliente empresarial y equipos monitoreados.
 
+---
+
 ## Flujo operativo
 
 1. **Recepción y correlación** — Zabbix/LibreNMS envían un POST al webhook correspondiente; se valida la clave secreta y se correlaciona con incidentes existentes.
@@ -69,6 +101,8 @@ También extiende `res.partner` con campos NOC: WhatsApp, IP monitoreada (legacy
 3. **Creación y asignación de tickets** — Se genera el ticket y se asigna al técnico con menor carga en la zona correspondiente.
 4. **Comunicación con técnicos por WhatsApp** — Mensaje automático con los datos del ticket y sesión de chat interactiva (menú / consulta a IA / cierre).
 5. **Notificaciones al cliente** — Aviso de afectación, número de ticket y notificación de restablecimiento con duración calculada.
+
+---
 
 ## Cron jobs
 
@@ -78,6 +112,8 @@ También extiende `res.partner` con campos NOC: WhatsApp, IP monitoreada (legacy
 | Crear tickets de incidents pendientes | Cada 20 minutos | Diagnóstico IA + creación de ticket + notificación |
 | Envío automático de reportes mensuales | Día 1 de cada mes | Reportes PDF a clientes empresariales |
 | Limpiar sesiones WhatsApp inactivas | Cada hora | Cierra sesiones sin actividad por +2 horas |
+
+---
 
 ## Configuración
 
@@ -95,22 +131,46 @@ El módulo usa parámetros del sistema de Odoo (`ir.config_parameter`):
 
 > La API Key de Anthropic Claude se configura como variable de entorno del sistema operativo (`ANTHROPIC_API_KEY`), **no** como parámetro del sistema de Odoo.
 
+---
+
 ## Requisitos
 
-- Odoo 18
-- PostgreSQL
+- Odoo 19
+- PostgreSQL 15+
 - Python 3.12
 - Zabbix 7.0 y/o LibreNMS
 - Evolution API (servidor WhatsApp Business)
 - API Key de Anthropic (Claude)
 
+---
+
 ## Instalación
 
-1. Clonar este repositorio dentro de la carpeta de addons de tu instancia de Odoo 18.
-2. Configurar la variable de entorno `ANTHROPIC_API_KEY`.
-3. Configurar los parámetros del sistema listados en la sección [Configuración](#configuración) desde **Ajustes → Técnico → Parámetros del sistema**.
-4. Instalar el módulo desde la interfaz de Apps de Odoo (con modo desarrollador activado).
-5. Configurar el Media Type de tipo Webhook en Zabbix apuntando a `/zabbix/webhook` en el servidor Odoo (ver guía de configuración de Zabbix en la documentación del proyecto).
+1. Clonar este repositorio dentro de la carpeta de módulos de tu instancia de Odoo 19:
+   ```bash
+   git clone https://github.com/MrSilence0/WIFIMAX-NOC-AI-ODOO19.git wifimax_noc_ai
+   ```
+
+2. Instalar la dependencia de Anthropic en el virtualenv de Odoo 19:
+   ```bash
+   pip install anthropic
+   ```
+
+3. Configurar la variable de entorno `ANTHROPIC_API_KEY` en `~/.bashrc`:
+   ```bash
+   export ANTHROPIC_API_KEY="sk-ant-..."
+   ```
+
+4. Configurar los parámetros del sistema desde **Ajustes → Técnico → Parámetros del sistema**.
+
+5. Instalar el módulo desde la interfaz de Apps de Odoo (con modo desarrollador activado):
+   ```bash
+   ./odoo-bin -c odoo19.conf -d tu_base_de_datos --init=wifimax_noc_ai
+   ```
+
+6. Configurar el Media Type de tipo Webhook en Zabbix apuntando a `/zabbix/webhook` en el servidor Odoo.
+
+---
 
 ## Estado del proyecto
 
@@ -122,6 +182,8 @@ Sistema funcional en ambiente de pruebas. Todas las acciones recomendadas por la
 - Flujo de aprobación de acciones de Zona Amarilla vía WhatsApp.
 - Migrar la API Key de Anthropic a un gestor de secretos (ej. HashiCorp Vault).
 - Portal web de autoservicio para clientes empresariales.
+
+---
 
 ## Licencia
 

@@ -11,7 +11,7 @@ class WhatsAppIncomingWebhook(http.Controller):
 
     @http.route(
         '/whatsapp/incoming',
-        type='json',
+        type='jsonrpc',
         auth='public',
         csrf=False,
         methods=['POST']

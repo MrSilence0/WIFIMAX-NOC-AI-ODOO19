@@ -17,3 +17,7 @@ __pycache__/
 *.log
 *.pot~
 *.swp
+
+# Odoo assets compilados
+/static/src/**/*.min.js
+/static/src/**/*.min.css
