@@ -115,24 +115,6 @@ También extiende `res.partner` con campos NOC: WhatsApp, IP monitoreada (legacy
 
 ---
 
-## Configuración
-
-El módulo usa parámetros del sistema de Odoo (`ir.config_parameter`):
-
-| Parámetro | Descripción |
-| --- | --- |
-| `noc.zabbix.url` | URL base del servidor Zabbix |
-| `noc.zabbix.api_token` | Token de autenticación de Zabbix |
-| `noc.librenms.url` | URL base del servidor LibreNMS |
-| `noc.librenms.api_token` | Token de autenticación de LibreNMS |
-| `noc.webhook.secret` | Clave secreta compartida para validar webhooks entrantes |
-| `noc.default_technician_id` | Técnico asignado por defecto si no hay zona configurada |
-| `web.base.url` | URL pública del servidor Odoo para generación de links |
-
-> La API Key de Anthropic Claude se configura como variable de entorno del sistema operativo (`ANTHROPIC_API_KEY`), **no** como parámetro del sistema de Odoo.
-
----
-
 ## Requisitos
 
 - Odoo 19
@@ -159,16 +141,124 @@ El módulo usa parámetros del sistema de Odoo (`ir.config_parameter`):
 3. Configurar la variable de entorno `ANTHROPIC_API_KEY` en `~/.bashrc`:
    ```bash
    export ANTHROPIC_API_KEY="sk-ant-..."
+   source ~/.bashrc
    ```
 
-4. Configurar los parámetros del sistema desde **Ajustes → Técnico → Parámetros del sistema**.
-
-5. Instalar el módulo desde la interfaz de Apps de Odoo (con modo desarrollador activado):
+4. Instalar el módulo desde la interfaz de Apps de Odoo (con modo desarrollador activado):
    ```bash
    ./odoo-bin -c odoo19.conf -d tu_base_de_datos --init=wifimax_noc_ai
    ```
 
-6. Configurar el Media Type de tipo Webhook en Zabbix apuntando a `/zabbix/webhook` en el servidor Odoo.
+5. Configurar los parámetros del sistema (ver sección siguiente).
+
+6. Configurar el servidor de correo saliente (ver sección siguiente).
+
+7. Configurar el Media Type de tipo Webhook en Zabbix apuntando a `/zabbix/webhook` en el servidor Odoo.
+
+---
+
+## Configuración de parámetros del sistema
+
+Ir a **Ajustes → Técnico → Parámetros del sistema** y configurar los siguientes valores:
+
+### `noc.zabbix.url`
+URL base del servidor Zabbix, sin barra al final.  
+**Cómo obtenerla:** es la misma URL que usas para acceder al panel web de Zabbix.  
+**Ejemplo:** `http://localhost:8082`
+
+---
+
+### `noc.zabbix.api_token`
+Token de autenticación para la API de Zabbix.  
+**Cómo obtenerlo:**
+1. Inicia sesión en Zabbix como administrador.
+2. Ve a **User settings → API tokens → Create API token**.
+3. Asigna un nombre, selecciona el usuario y haz clic en **Add**.
+4. Copia el token generado — solo se muestra una vez.
+
+**Ejemplo:** `abc123def456...`
+
+---
+
+### `noc.librenms.url`
+URL base del servidor LibreNMS, sin barra al final.  
+**Cómo obtenerla:** es la misma URL que usas para acceder al panel web de LibreNMS.  
+**Ejemplo:** `http://localhost:8081`
+
+---
+
+### `noc.librenms.api_token`
+Token de autenticación para la API de LibreNMS.  
+**Cómo obtenerlo:**
+1. Inicia sesión en LibreNMS como administrador.
+2. Ve a **Preferences → API Tokens** (esquina superior derecha, menú de usuario).
+3. Haz clic en **Create API Token**.
+4. Copia el token generado.
+
+**Ejemplo:** `xyz789abc123...`
+
+---
+
+### `noc.webhook.secret`
+Clave secreta compartida para validar que los webhooks entrantes provienen de Zabbix o LibreNMS.  
+**Cómo obtenerla:** es una clave que tú defines libremente. Debe ser la misma que configures en el Media Type de Zabbix y en las alertas de LibreNMS.  
+**Recomendación:** usa una cadena aleatoria de al menos 16 caracteres.  
+**Ejemplo:** `mi_clave_secreta_2026`
+
+---
+
+### `noc.default_technician_id`
+ID del usuario de Odoo que se asignará como técnico cuando el cliente afectado no tenga zona NOC configurada.  
+**Cómo obtenerlo:**
+1. Ve a **Ajustes → Usuarios y empresas → Usuarios**.
+2. Abre el perfil del técnico por defecto.
+3. El ID aparece en la URL del navegador: `.../odoo/users/`**6** — ese número es el ID.
+
+**Ejemplo:** `6`
+
+---
+
+### `web.base.url`
+URL pública del servidor Odoo que se usa para generar los links de tickets en los mensajes de WhatsApp.  
+**Importante para Odoo 19:** si Evolution API está en una VM o servidor diferente, esta URL debe ser la IP accesible desde esa red, no `localhost`.  
+**Ejemplo:** `http://192.168.1.2:8070`
+
+---
+
+## Configuración del servidor de correo saliente
+
+El módulo envía notificaciones por correo al técnico asignado cuando se crea un ticket. Para activarlo:
+
+### Paso 1 — Configurar el servidor SMTP en Odoo
+
+Ir a **Ajustes → Técnico → Correo electrónico → Servidores de correo saliente → Nuevo** y completar:
+
+| Campo | Valor |
+| --- | --- |
+| Nombre | Gmail NOC (o el nombre que prefieras) |
+| Servidor SMTP | `smtp.gmail.com` |
+| Puerto | `587` |
+| Cifrado | TLS (STARTTLS) |
+| Usuario | tu correo de Gmail |
+| Contraseña | contraseña de aplicación (ver Paso 2) |
+
+Haz clic en **Probar conexión** para verificar.
+
+---
+
+### Paso 2 — Obtener la contraseña de aplicación de Gmail
+
+> La contraseña de aplicación es diferente a tu contraseña normal de Gmail. Se genera específicamente para aplicaciones externas y **no expone tu contraseña real**.
+
+1. Ve a [myaccount.google.com](https://myaccount.google.com).
+2. En el menú izquierdo selecciona **Seguridad**.
+3. Activa la **Verificación en dos pasos** si no la tienes activa (es requisito).
+4. Una vez activa, en la misma sección de Seguridad busca **Contraseñas de aplicaciones**.
+5. En el campo **Seleccionar aplicación** escribe `Odoo NOC` o cualquier nombre descriptivo.
+6. Haz clic en **Crear**.
+7. Google genera una contraseña de 16 caracteres — cópiala y úsala en el campo **Contraseña** del servidor SMTP de Odoo.
+
+> **Nota:** esta contraseña solo se muestra una vez. Si la pierdes deberás generar una nueva.
 
 ---
 
