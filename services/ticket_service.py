@@ -64,6 +64,27 @@ class TicketService:
         WhatsAppAlertService.send_client_ticket_notification(env, ticket)
         TicketService._assign_technician(env, ticket, partner)
 
+        template = env.ref(
+            'wifimax_noc_ai.email_template_noc_ticket_created',
+            raise_if_not_found=False
+        )
+        if template and ticket.assigned_user_id and ticket.assigned_user_id.email:
+            try:
+                template.send_mail(
+                    ticket.id,
+                    force_send=True,
+                    email_values={
+                        'email_to': ticket.assigned_user_id.email,
+                    }
+                )
+            except Exception:
+                _logger.exception('Error enviando email al técnico')
+
+        try:
+            ticket._send_ticket_to_technician_whatsapp()
+        except Exception:
+            _logger.exception('Error enviando WhatsApp al técnico')
+
         return ticket
 
     @staticmethod

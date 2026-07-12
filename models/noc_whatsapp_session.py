@@ -22,6 +22,7 @@ class NocWhatsappSession(models.Model):
     )
 
     state = fields.Selection([
+        ('lista_tickets', 'Lista de tickets'),
         ('menu', 'Menú principal'),
         ('chat_ia', 'Chat IA'),
         ('tras_link', 'Tras ver link'),

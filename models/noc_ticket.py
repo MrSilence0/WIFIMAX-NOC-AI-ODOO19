@@ -29,6 +29,11 @@ class NocTicket(models.Model):
     description = fields.Text(
         string='Descripción'
     )
+    
+    description_html = fields.Html(
+        compute='_compute_description_html',
+        string='Descripción HTML'
+    )
 
     status = fields.Selection(
         [
@@ -200,6 +205,21 @@ class NocTicket(models.Model):
         'ticket_id',
         string='Acciones IA',
     )
+    
+    @api.depends('description')
+    def _compute_description_html(self):
+        for rec in self:
+            if rec.description:
+                html = rec.description
+                html = html.replace('RESUMEN:', '<br/><strong>RESUMEN:</strong>')
+                html = html.replace('POSIBLE CAUSA:', '<br/><strong>POSIBLE CAUSA:</strong>')
+                html = html.replace('IMPACTO:', '<br/><strong>IMPACTO:</strong>')
+                html = html.replace('ACCIONES RECOMENDADAS:', '<br/><strong>ACCIONES RECOMENDADAS:</strong><br/>')
+                html = html.replace('\n- ', '<br/>• ')
+                html = html.replace('\n', '<br/>')
+                rec.description_html = html
+            else:
+                rec.description_html = ''
 
     # =========================
     # SLA DEADLINE
@@ -304,9 +324,15 @@ class NocTicket(models.Model):
 
         if template:
             for rec in records:
-                if rec.partner_id.email:
+                if rec.assigned_user_id and rec.assigned_user_id.email:
                     try:
-                        template.send_mail(rec.id, force_send=True)
+                        template.send_mail(
+                            rec.id,
+                            force_send=True,
+                            email_values={
+                                'email_to': rec.assigned_user_id.email,
+                            }
+                        )
                     except Exception:
                         _logger.exception('Error enviando email')
 
