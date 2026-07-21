@@ -10,3 +10,5 @@ from . import noc_whatsapp_session
 from . import noc_zone
 from . import noc_action_request
 from . import noc_device
+from . import noc_bonification
+from . import noc_bonification

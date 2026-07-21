@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="bonification_rule_0" model="wifimax.noc.bonification.rule">
+            <field name="discount_days">0</field>
+            <field name="discount_percent">0.00</field>
+            <field name="downtime_min">0.00</field>
+            <field name="downtime_max">7.20</field>
+            <field name="availability_min">99.00</field>
+            <field name="availability_max">100.00</field>
+        </record>
+        <record id="bonification_rule_1" model="wifimax.noc.bonification.rule">
+            <field name="discount_days">1</field>
+            <field name="discount_percent">3.33</field>
+            <field name="downtime_min">7.21</field>
+            <field name="downtime_max">10.82</field>
+            <field name="availability_min">98.99</field>
+            <field name="availability_max">94.49</field>
+        </record>
+        <record id="bonification_rule_2" model="wifimax.noc.bonification.rule">
+            <field name="discount_days">2</field>
+            <field name="discount_percent">6.67</field>
+            <field name="downtime_min">10.83</field>
+            <field name="downtime_max">14.43</field>
+            <field name="availability_min">98.48</field>
+            <field name="availability_max">98.98</field>
+        </record>
+        <record id="bonification_rule_3" model="wifimax.noc.bonification.rule">
+            <field name="discount_days">3</field>
+            <field name="discount_percent">10.00</field>
+            <field name="downtime_min">14.44</field>
+            <field name="downtime_max">18.04</field>
+            <field name="availability_min">97.97</field>
+            <field name="availability_max">98.47</field>
+        </record>
+        <record id="bonification_rule_4" model="wifimax.noc.bonification.rule">
+            <field name="discount_days">4</field>
+            <field name="discount_percent">13.33</field>
+            <field name="downtime_min">18.05</field>
+            <field name="downtime_max">21.65</field>
+            <field name="availability_min">97.46</field>
+            <field name="availability_max">97.96</field>
+        </record>
+        <record id="bonification_rule_5" model="wifimax.noc.bonification.rule">
+            <field name="discount_days">5</field>
+            <field name="discount_percent">16.67</field>
+            <field name="downtime_min">21.66</field>
+            <field name="downtime_max">25.26</field>
+            <field name="availability_min">96.95</field>
+            <field name="availability_max">97.45</field>
+        </record>
+        <record id="bonification_rule_6" model="wifimax.noc.bonification.rule">
+            <field name="discount_days">6</field>
+            <field name="discount_percent">20.00</field>
+            <field name="downtime_min">25.27</field>
+            <field name="downtime_max">28.87</field>
+            <field name="availability_min">96.44</field>
+            <field name="availability_max">96.94</field>
+        </record>
+        <record id="bonification_rule_7" model="wifimax.noc.bonification.rule">
+            <field name="discount_days">7</field>
+            <field name="discount_percent">23.33</field>
+            <field name="downtime_min">28.88</field>
+            <field name="downtime_max">32.48</field>
+            <field name="availability_min">95.93</field>
+            <field name="availability_max">96.43</field>
+        </record>
+        <record id="bonification_rule_8" model="wifimax.noc.bonification.rule">
+            <field name="discount_days">8</field>
+            <field name="discount_percent">26.67</field>
+            <field name="downtime_min">32.49</field>
+            <field name="downtime_max">36.09</field>
+            <field name="availability_min">95.42</field>
+            <field name="availability_max">95.92</field>
+        </record>
+        <record id="bonification_rule_9" model="wifimax.noc.bonification.rule">
+            <field name="discount_days">9</field>
+            <field name="discount_percent">30.30</field>
+            <field name="downtime_min">36.10</field>
+            <field name="downtime_max">39.70</field>
+            <field name="availability_min">94.91</field>
+            <field name="availability_max">95.41</field>
+        </record>
+        <record id="bonification_rule_10" model="wifimax.noc.bonification.rule">
+            <field name="discount_days">10</field>
+            <field name="discount_percent">33.33</field>
+            <field name="downtime_min">39.71</field>
+            <field name="downtime_max">43.31</field>
+            <field name="availability_min">94.40</field>
+            <field name="availability_max">94.90</field>
+        </record>
+        <record id="bonification_rule_11" model="wifimax.noc.bonification.rule">
+            <field name="discount_days">11</field>
+            <field name="discount_percent">37.67</field>
+            <field name="downtime_min">43.32</field>
+            <field name="downtime_max">46.92</field>
+            <field name="availability_min">93.89</field>
+            <field name="availability_max">93.39</field>
+        </record>
+        <record id="bonification_rule_12" model="wifimax.noc.bonification.rule">
+            <field name="discount_days">12</field>
+            <field name="discount_percent">40.00</field>
+            <field name="downtime_min">46.93</field>
+            <field name="downtime_max">50.53</field>
+            <field name="availability_min">93.38</field>
+            <field name="availability_max">93.88</field>
+        </record>
+        <record id="bonification_rule_13" model="wifimax.noc.bonification.rule">
+            <field name="discount_days">13</field>
+            <field name="discount_percent">43.33</field>
+            <field name="downtime_min">50.54</field>
+            <field name="downtime_max">54.14</field>
+            <field name="availability_min">92.87</field>
+            <field name="availability_max">93.37</field>
+        </record>
+        <record id="bonification_rule_14" model="wifimax.noc.bonification.rule">
+            <field name="discount_days">14</field>
+            <field name="discount_percent">46.67</field>
+            <field name="downtime_min">54.15</field>
+            <field name="downtime_max">57.75</field>
+            <field name="availability_min">92.36</field>
+            <field name="availability_max">92.86</field>
+        </record>
+        <record id="bonification_rule_15" model="wifimax.noc.bonification.rule">
+            <field name="discount_days">15</field>
+            <field name="discount_percent">50.50</field>
+            <field name="downtime_min">57.76</field>
+            <field name="downtime_max">61.36</field>
+            <field name="availability_min">91.85</field>
+            <field name="availability_max">92.35</field>
+        </record>
+        <record id="bonification_rule_16" model="wifimax.noc.bonification.rule">
+            <field name="discount_days">16</field>
+            <field name="discount_percent">53.33</field>
+            <field name="downtime_min">61.37</field>
+            <field name="downtime_max">64.97</field>
+            <field name="availability_min">91.34</field>
+            <field name="availability_max">92.84</field>
+        </record>
+        <record id="bonification_rule_17" model="wifimax.noc.bonification.rule">
+            <field name="discount_days">17</field>
+            <field name="discount_percent">57.67</field>
+            <field name="downtime_min">64.98</field>
+            <field name="downtime_max">66.58</field>
+            <field name="availability_min">90.83</field>
+            <field name="availability_max">91.33</field>
+        </record>
+        <record id="bonification_rule_18" model="wifimax.noc.bonification.rule">
+            <field name="discount_days">18</field>
+            <field name="discount_percent">60.00</field>
+            <field name="downtime_min">68.59</field>
+            <field name="downtime_max">72.19</field>
+            <field name="availability_min">90.32</field>
+            <field name="availability_max">90.82</field>
+        </record>
+        <record id="bonification_rule_19" model="wifimax.noc.bonification.rule">
+            <field name="discount_days">19</field>
+            <field name="discount_percent">63.33</field>
+            <field name="downtime_min">72.20</field>
+            <field name="downtime_max">75.80</field>
+            <field name="availability_min">89.81</field>
+            <field name="availability_max">90.31</field>
+        </record>
+        <record id="bonification_rule_20" model="wifimax.noc.bonification.rule">
+            <field name="discount_days">20</field>
+            <field name="discount_percent">66.67</field>
+            <field name="downtime_min">75.81</field>
+            <field name="downtime_max">79.41</field>
+            <field name="availability_min">89.30</field>
+            <field name="availability_max">89.80</field>
+        </record>
+        <record id="bonification_rule_21" model="wifimax.noc.bonification.rule">
+            <field name="discount_days">21</field>
+            <field name="discount_percent">70.00</field>
+            <field name="downtime_min">79.42</field>
+            <field name="downtime_max">83.02</field>
+            <field name="availability_min">88.79</field>
+            <field name="availability_max">89.29</field>
+        </record>
+        <record id="bonification_rule_22" model="wifimax.noc.bonification.rule">
+            <field name="discount_days">22</field>
+            <field name="discount_percent">73.33</field>
+            <field name="downtime_min">83.03</field>
+            <field name="downtime_max">86.63</field>
+            <field name="availability_min">88.28</field>
+            <field name="availability_max">88.78</field>
+        </record>
+        <record id="bonification_rule_23" model="wifimax.noc.bonification.rule">
+            <field name="discount_days">23</field>
+            <field name="discount_percent">76.67</field>
+            <field name="downtime_min">86.64</field>
+            <field name="downtime_max">90.24</field>
+            <field name="availability_min">87.77</field>
+            <field name="availability_max">88.27</field>
+        </record>
+        <record id="bonification_rule_24" model="wifimax.noc.bonification.rule">
+            <field name="discount_days">24</field>
+            <field name="discount_percent">80.00</field>
+            <field name="downtime_min">90.25</field>
+            <field name="downtime_max">93.85</field>
+            <field name="availability_min">87.26</field>
+            <field name="availability_max">87.76</field>
+        </record>
+        <record id="bonification_rule_25" model="wifimax.noc.bonification.rule">
+            <field name="discount_days">25</field>
+            <field name="discount_percent">83.33</field>
+            <field name="downtime_min">93.86</field>
+            <field name="downtime_max">97.46</field>
+            <field name="availability_min">86.75</field>
+            <field name="availability_max">87.25</field>
+        </record>
+        <record id="bonification_rule_26" model="wifimax.noc.bonification.rule">
+            <field name="discount_days">26</field>
+            <field name="discount_percent">86.67</field>
+            <field name="downtime_min">97.47</field>
+            <field name="downtime_max">101.07</field>
+            <field name="availability_min">86.24</field>
+            <field name="availability_max">86.74</field>
+        </record>
+        <record id="bonification_rule_27" model="wifimax.noc.bonification.rule">
+            <field name="discount_days">27</field>
+            <field name="discount_percent">90.00</field>
+            <field name="downtime_min">101.08</field>
+            <field name="downtime_max">104.68</field>
+            <field name="availability_min">85.73</field>
+            <field name="availability_max">86.23</field>
+        </record>
+        <record id="bonification_rule_28" model="wifimax.noc.bonification.rule">
+            <field name="discount_days">28</field>
+            <field name="discount_percent">93.33</field>
+            <field name="downtime_min">104.69</field>
+            <field name="downtime_max">108.29</field>
+            <field name="availability_min">85.22</field>
+            <field name="availability_max">85.72</field>
+        </record>
+        <record id="bonification_rule_29" model="wifimax.noc.bonification.rule">
+            <field name="discount_days">29</field>
+            <field name="discount_percent">96.67</field>
+            <field name="downtime_min">108.30</field>
+            <field name="downtime_max">720.00</field>
+            <field name="availability_min">84.71</field>
+            <field name="availability_max">85.21</field>
+        </record>
+
+    </data>
+</odoo>

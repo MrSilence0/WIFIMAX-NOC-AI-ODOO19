@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- ════════════════════════════════════════════════ -->
+        <!-- REGLAS DE BONIFICACIÓN                          -->
+        <!-- ════════════════════════════════════════════════ -->
+
+        <record id="view_bonification_rule_tree" model="ir.ui.view">
+            <field name="name">wifimax.noc.bonification.rule.tree</field>
+            <field name="model">wifimax.noc.bonification.rule</field>
+            <field name="arch" type="xml">
+                <list editable="bottom">
+                    <field name="discount_days"/>
+                    <field name="discount_percent"/>
+                    <field name="downtime_min"/>
+                    <field name="downtime_max"/>
+                    <field name="availability_min"/>
+                    <field name="availability_max"/>
+                    <field name="active" column_invisible="True"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="action_bonification_rule" model="ir.actions.act_window">
+            <field name="name">Tabla de Bonificaciones</field>
+            <field name="res_model">wifimax.noc.bonification.rule</field>
+            <field name="view_mode">list</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Crear la primera regla de bonificación
+                </p>
+                <p>
+                    Configure los porcentajes de descuento según las horas de indisponibilidad mensual.
+                </p>
+            </field>
+        </record>
+
+        <!-- ════════════════════════════════════════════════ -->
+        <!-- BONIFICACIONES POR CLIENTE                      -->
+        <!-- ════════════════════════════════════════════════ -->
+
+        <record id="view_client_bonification_tree" model="ir.ui.view">
+            <field name="name">wifimax.noc.client.bonification.tree</field>
+            <field name="model">wifimax.noc.client.bonification</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="partner_id"/>
+                    <field name="period"/>
+                    <field name="total_tickets"/>
+                    <field name="total_downtime_hours" widget="float_time"/>
+                    <field name="availability_percent"/>
+                    <field name="discount_days"/>
+                    <field name="discount_percent"/>
+                    <field name="rule_id"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_client_bonification_form" model="ir.ui.view">
+            <field name="name">wifimax.noc.client.bonification.form</field>
+            <field name="model">wifimax.noc.client.bonification</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_recalculate" type="object"
+                                string="Recalcular" class="btn-primary"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group string="Cliente y Período">
+                                <field name="partner_id"/>
+                                <field name="year"/>
+                                <field name="month"/>
+                                <field name="period"/>
+                            </group>
+                            <group string="Cálculo de Bonificación">
+                                <field name="total_tickets"/>
+                                <field name="total_downtime_hours" widget="float_time"/>
+                                <field name="availability_percent"/>
+                                <field name="rule_id"/>
+                                <field name="discount_days"/>
+                                <field name="discount_percent"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_client_bonification_search" model="ir.ui.view">
+            <field name="name">wifimax.noc.client.bonification.search</field>
+            <field name="model">wifimax.noc.client.bonification</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="partner_id"/>
+                    <field name="year"/>
+                    <field name="month"/>
+                    <filter name="group_partner" string="Por Cliente"
+                            context="{'group_by': 'partner_id'}"/>
+                    <filter name="group_period" string="Por Período"
+                            context="{'group_by': 'period'}"/>
+                    <filter name="group_year" string="Por Año"
+                            context="{'group_by': 'year'}"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="view_client_bonification_pivot" model="ir.ui.view">
+            <field name="name">wifimax.noc.client.bonification.pivot</field>
+            <field name="model">wifimax.noc.client.bonification</field>
+            <field name="arch" type="xml">
+                <pivot>
+                    <field name="partner_id" type="row"/>
+                    <field name="period" type="col"/>
+                    <field name="total_downtime_hours" type="measure"/>
+                    <field name="availability_percent" type="measure"/>
+                    <field name="discount_days" type="measure"/>
+                    <field name="discount_percent" type="measure"/>
+                    <field name="total_tickets" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record id="action_client_bonification" model="ir.actions.act_window">
+            <field name="name">Bonificaciones por Cliente</field>
+            <field name="res_model">wifimax.noc.client.bonification</field>
+            <field name="view_mode">list,pivot,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No hay bonificaciones registradas
+                </p>
+                <p>
+                    Las bonificaciones se generan automáticamente el día 1 de cada mes o puede crearlas manualmente.
+                </p>
+            </field>
+        </record>
+
+        <!-- ════════════════════════════════════════════════ -->
+        <!-- MENÚ                                            -->
+        <!-- ════════════════════════════════════════════════ -->
+
+        <menuitem id="menu_bonification_parent"
+                  name="Bonificaciones"
+                  parent="wifimax_noc_ai.menu_wifimax_root"
+                  sequence="60"/>
+
+        <menuitem id="menu_bonification_rules"
+                  name="Tabla de Bonificaciones"
+                  parent="wifimax_noc_ai.menu_bonification_parent"
+                  action="wifimax_noc_ai.action_bonification_rule"
+                  sequence="10"/>
+
+        <menuitem id="menu_client_bonification"
+                  name="Bonificaciones por Cliente"
+                  parent="wifimax_noc_ai.menu_bonification_parent"
+                  action="wifimax_noc_ai.action_client_bonification"
+                  sequence="20"/>
+
+    </data>
+</odoo>

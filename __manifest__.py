@@ -27,6 +27,8 @@
         'data/cron.xml',
         'data/mail_template.xml',
         'data/mail_report_template.xml',
+        'views/noc_bonification_views.xml',
+        'data/noc_bonification_data.xml',
 
         # VIEWS
         'views/home_menu_views.xml',

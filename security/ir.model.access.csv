@@ -16,3 +16,5 @@ access_noc_whatsapp_session,wifimax.noc.whatsapp.session,model_wifimax_noc_whats
 access_noc_zone,wifimax.noc.zone,model_wifimax_noc_zone,base.group_user,1,1,1,1
 access_wifimax_noc_device,wifimax.noc.device,model_wifimax_noc_device,base.group_user,1,1,1,1
 access_noc_action_request,wifimax.noc.action.request,model_wifimax_noc_action_request,base.group_user,1,1,1,1
+access_wifimax_noc_bonification_rule,wifimax.noc.bonification.rule,model_wifimax_noc_bonification_rule,base.group_user,1,1,1,1
+access_wifimax_noc_client_bonification,wifimax.noc.client.bonification,model_wifimax_noc_client_bonification,base.group_user,1,1,1,1
