@@ -540,6 +540,7 @@ class WhatsAppAIService:
             ticket=ticket,
             history=history,
             question=text,
+            env=env,
         )
 
         session.sudo().add_message('user', text)

@@ -67,7 +67,21 @@ class NocWhatsappSession(models.Model):
         ])
 
         if stale:
-            stale.write({'state': 'closed'})
+            settings = self.env['wifimax.whatsapp.settings'].sudo().search([
+                ('default_for_noc', '=', True),
+                ('active', '=', True),
+            ], limit=1)
+            for session in stale:
+                session.write({'state': 'closed'})
+                if settings:
+                    try:
+                        settings.send_message(
+                            session.phone,
+                            "⏰ *Sesión cerrada por inactividad.*\n\n"
+                            "_Escribe *Reactivar* para ver tus tickets abiertos._"
+                        )
+                    except Exception:
+                        _logger.exception('Error notificando cierre de sesión')
             _logger.info(
                 'Sesiones WhatsApp inactivas cerradas: %s',
                 len(stale)

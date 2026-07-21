@@ -535,8 +535,11 @@ class NocTicket(models.Model):
             f"━━━━━━━━━━━━━━━━\n"
             f"*¿Qué deseas hacer?*\n\n"
             f"1️⃣ Ver ticket en Odoo\n"
-            f"2️⃣ Consultar IA sobre este ticket\n\n"
-            f"_Responde con 1 o 2_"
+            f"2️⃣ Consultar IA sobre este ticket\n"
+            f"3️⃣ Marcar como resuelto\n"
+            f"4️⃣ Volver a lista de tickets\n"
+            f"5️⃣ Cerrar conversación\n\n"
+            f"_Responde con 1, 2, 3, 4 o 5_"
         )
 
     # =========================
@@ -606,7 +609,12 @@ class NocTicket(models.Model):
                 ('phone', '=', phone_digits),
                 ('state', '!=', 'closed'),
             ], limit=1)
-            if not existing:
+            if existing:
+                existing.sudo().write({
+                    'ticket_id': self.id,
+                    'state': 'menu',
+                })
+            else:
                 self.env['wifimax.noc.whatsapp.session'].sudo().create({
                     'phone': phone_digits,
                     'ticket_id': self.id,
