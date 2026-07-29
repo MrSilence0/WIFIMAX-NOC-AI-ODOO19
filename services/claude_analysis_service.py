@@ -21,18 +21,14 @@ OLLAMA_MODELS = {
 
 
 def _get_ai_config(env):
-    """
-    Lee la configuración del proveedor de IA desde los parámetros del sistema.
-    Retorna dict con provider, url, model.
-    """
     get = env['ir.config_parameter'].sudo().get_param
     provider = get('noc.ai.provider', 'anthropic')
-    local_url = get('noc.ai.local_url', 'http://localhost:11434')
-    local_model = get('noc.ai.local_model', 'qwen2.5:32b')
+    ollama_host = get('noc.ai.ollama_host', 'http://localhost:8090')
+    ollama_model = get('noc.ai.ollama_model', 'qwen2.5-coder:32b')  # ← Cambié a qwen
     return {
         'provider': provider,
-        'url': local_url.rstrip('/'),
-        'model': local_model,
+        'url': ollama_host,
+        'model': ollama_model,
     }
 
 

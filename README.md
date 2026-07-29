@@ -329,15 +329,15 @@ Proveedor de inteligencia artificial para diagnósticos y chat. Valores: `anthro
 
 ---
 
-### `noc.ai.local_url`
+### `noc.ai.ollama_host`
 URL del servidor Ollama. Solo aplica si `noc.ai.provider` es `local`.  
-**Ejemplo:** `http://localhost:11434`
+**Ejemplo:** `http://localhost:8090`
 
 ---
 
-### `noc.ai.local_model`
+### `noc.ai.ollama_model`
 Nombre del modelo de Ollama a utilizar. Solo aplica si `noc.ai.provider` es `local`.  
-**Ejemplo:** `qwen2.5:32b`
+**Ejemplo:** `qwen2.5-coder:32b`
 
 ---
 
@@ -356,24 +356,24 @@ El sistema soporta dos proveedores de IA: **Anthropic Claude** (nube) y **Ollama
 curl -fsSL https://ollama.com/install.sh | sh
 
 # Descargar los modelos
-ollama pull qwen2.5:32b
+ollama pull qwen2.5-coder:32b
 ollama pull deepseek-r1:32b
 ollama pull llama3.1:70b
 ```
 
 ### Modelos probados
 
-| Modelo | Parámetro `noc.ai.local_model` | RAM mínima | Descripción |
+| Modelo | Parámetro `noc.ai.ollama_model` | RAM mínima | Descripción |
 |--------|-------------------------------|------------|-------------|
-| Qwen 2.5 32B | `qwen2.5:32b` | 20 GB | Modelo generalista de alto rendimiento |
+| Qwen 2.5 32B | `qwen2.5-coder:32b` | 20 GB | Modelo generalista de alto rendimiento |
 | DeepSeek R1 32B | `deepseek-r1:32b` | 20 GB | Modelo con razonamiento avanzado |
 | Llama 3.1 70B | `llama3.1:70b` | 40 GB | Modelo de Meta cuantizado para uso local |
 
 ### Activar IA local
 
 1. Cambiar `noc.ai.provider` a `local` en **Ajustes → Parámetros del sistema**
-2. Configurar `noc.ai.local_url` (por defecto `http://localhost:11434`)
-3. Configurar `noc.ai.local_model` con el nombre del modelo deseado
+2. Configurar `noc.ai.ollama_host` (por defecto `http://localhost:8090`)
+3. Configurar `noc.ai.ollama_model` con el nombre del modelo deseado
 
 ### Volver a Claude
 
