@@ -2,7 +2,6 @@ import os
 import json
 import logging
 import requests
-from anthropic import Anthropic
 
 _logger = logging.getLogger(__name__)
 
@@ -34,6 +33,8 @@ def _get_ai_config(env):
 
 def _get_anthropic_client():
     """Retorna un cliente Anthropic. Lanza error si no hay API key."""
+    from anthropic import Anthropic
+    
     if not CLAUDE_API_KEY:
         raise ValueError(
             "No se encontró ANTHROPIC_API_KEY en las variables de entorno. "
