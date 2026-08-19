@@ -21,6 +21,9 @@
         'security/ir.model.access.csv',
         'security/noc_record_rules.xml',
 
+        # MENUS
+        'data/menu.xml',
+
         # DATA CORE
         'data/noc_sequence.xml',
         'data/noc_report_sequence.xml',
