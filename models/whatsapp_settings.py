@@ -501,3 +501,87 @@ class WhatsappSettings(models.Model):
                     'Error enviando documento:\n%s'
                 ) % str(e)
             )
+            
+    # =====================================================
+    # OLLAMA - CONFIGURACIÓN DE IA
+    # =====================================================
+
+    ollama_host = fields.Char(
+        string='Ollama Host',
+        help='URL del servidor Ollama. Ej: http://148.224.32.130:8090'
+    )
+
+    ollama_model = fields.Char(
+        string='Modelo Ollama',
+        default='qwen2.5-coder:32b',
+        help='Modelo a usar para diagnóstico. Ej: qwen2.5-coder:32b'
+    )
+
+    # =====================================================
+    # TEST OLLAMA CONNECTION
+    # =====================================================
+
+    def action_test_ollama_connection(self):
+        """Probar conexión a Ollama"""
+        self.ensure_one()
+
+        if not self.ollama_host:
+            raise ValidationError(
+                _('No hay configurado un host de Ollama')
+            )
+
+        try:
+            # Test: Conectar a Ollama
+            url = f"{self.ollama_host}/api/tags"
+            response = requests.get(
+                url,
+                timeout=5
+            )
+            response.raise_for_status()
+
+            data = response.json()
+            models = data.get('models', [])
+            model_names = [m['name'] for m in models]
+
+            # Construir mensaje
+            msg = f"CONEXIÓN EXITOSA\n\n"
+            msg += f"Host: {self.ollama_host}\n"
+            msg += f"Modelos instalados: {len(models)}\n\n"
+            for name in model_names:
+                msg += f"  • {name}\n"
+
+            if self.ollama_model and self.ollama_model not in model_names:
+                msg += f"\nModelo configurado '{self.ollama_model}' NO está instalado"
+
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'title': 'Ollama Conectado',
+                    'message': msg,
+                    'type': 'success',
+                    'sticky': True,
+                }
+            }
+
+        except requests.exceptions.ConnectionError:
+            raise ValidationError(
+                _(
+                    'NO SE PUEDE CONECTAR A OLLAMA\n\n'
+                    'Host: %s\n\n'
+                    'Soluciones:\n'
+                    '1. Verificar Ollama: sudo systemctl status ollama\n'
+                    '2. Reiniciar: sudo systemctl restart ollama\n'
+                    '3. Ver logs: sudo journalctl -u ollama -n 20'
+                ) % self.ollama_host
+            )
+
+        except requests.exceptions.Timeout:
+            raise ValidationError(
+                _('TIMEOUT: Ollama tardó más de 5 segundos en responder')
+            )
+
+        except Exception as e:
+            raise ValidationError(
+                _('ERROR: %s') % str(e)
+            )
