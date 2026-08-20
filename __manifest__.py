@@ -53,7 +53,7 @@
     'assets': {
         'web.assets_backend': [
 
-            'wifimax_noc_ai/static/src/webclient/home_menu/home_menu.scss',
+            # 'wifimax_noc_ai/static/src/webclient/home_menu/home_menu.scss',
 
             'wifimax_noc_ai/static/src/webclient/home_menu/home_menu.js',
             'wifimax_noc_ai/static/src/webclient/home_menu/home_menu.xml',
