@@ -508,13 +508,13 @@ class WhatsappSettings(models.Model):
 
     ollama_host = fields.Char(
         string='Ollama Host',
-        help='URL del servidor Ollama. Ej: http://148.224.32.130:8090'
+        help='URL del servidor Ollama.'
     )
 
     ollama_model = fields.Char(
         string='Modelo Ollama',
         default='qwen2.5-coder:32b',
-        help='Modelo a usar para diagnóstico. Ej: qwen2.5-coder:32b'
+        help='Modelo a usar para diagnóstico.'
     )
 
     # =====================================================
