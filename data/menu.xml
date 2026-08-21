@@ -2,8 +2,8 @@
 <odoo>
     <data>
         <menuitem id="menu_wifimax_root"
-                  name="NOC WiFiMax"
+                  name="NOC Wifimax IA"
                   sequence="10"
-                  web_icon="wifimax_noc_ai,static/description/icon.png"/>
+                  web_icon="wifimax_noc_ai,static/description/icon.svg"/>
     </data>
 </odoo>

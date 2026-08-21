@@ -55,12 +55,12 @@
 
             # 'wifimax_noc_ai/static/src/webclient/home_menu/home_menu.scss',
 
-            'wifimax_noc_ai/static/src/webclient/home_menu/home_menu.js',
-            'wifimax_noc_ai/static/src/webclient/home_menu/home_menu.xml',
-            'wifimax_noc_ai/static/src/webclient/home_menu/home_menu_action.js',
+            #'wifimax_noc_ai/static/src/webclient/home_menu/home_menu.js',
+            #'wifimax_noc_ai/static/src/webclient/home_menu/home_menu.xml',
+            #'wifimax_noc_ai/static/src/webclient/home_menu/home_menu_action.js',
 
-            'wifimax_noc_ai/static/src/webclient/navbar/navbar.js',
-            'wifimax_noc_ai/static/src/webclient/navbar/navbar.xml',
+            #'wifimax_noc_ai/static/src/webclient/navbar/navbar.js',
+            #'wifimax_noc_ai/static/src/webclient/navbar/navbar.xml',
         ],
     },
 
